@@ -1,1 +1,73 @@
-# sudokuboard
+def is_valid_sudoku(puzzle):
+    # Check if puzzle has valid structure
+    if len(puzzle) != 9:
+        return False
+    for row in puzzle:
+        if len(row) != 9:
+            return False
+    
+    # Check all rows
+    for row in puzzle:
+        numbers = set()
+        for cell in row:
+            if cell != 0 and cell != '.':
+                num = int(cell)
+                if num < 1 or num > 9:
+                    return False
+                if num in numbers:
+                    return False
+                numbers.add(num)
+    
+    # Check all columns
+    for col in range(9):
+        numbers = set()
+        for row in range(9):
+            cell = puzzle[row][col]
+            if cell != 0 and cell != '.':
+                num = int(cell)
+                if num in numbers:
+                    return False
+                numbers.add(num)
+    
+    # Check all 3x3 boxes
+    for box_row in range(0, 9, 3):
+        for box_col in range(0, 9, 3):
+            numbers = set()
+            for row in range(box_row, box_row + 3):
+                for col in range(box_col, box_col + 3):
+                    cell = puzzle[row][col]
+                    if cell != 0 and cell != '.':
+                        num = int(cell)
+                        if num in numbers:
+                            return False
+                        numbers.add(num)
+    
+    return True
+
+# Test with a good puzzle
+good_puzzle = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+]
+print("Good puzzle:", is_valid_sudoku(good_puzzle))  # Should print True
+
+# Test with a bad puzzle (has duplicate 5 in last row)
+bad_puzzle = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 5, 7, 9]  # Duplicate 5 here
+]
+print("Bad puzzle:", is_valid_sudoku(bad_puzzle))  # Should print False
